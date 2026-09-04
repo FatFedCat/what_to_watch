@@ -1,17 +1,17 @@
 # what_to_watch/opinions_app.py
 
 from datetime import datetime
-
-# Импортировать функцию для выбора случайного значения.
 from random import randrange
 
-from flask import Flask
+# Импортировать функцию render_template().
+from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
+
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite3'
+
 db = SQLAlchemy(app)
-app.json.ensure_ascii = False
 
 class Opinion(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -22,17 +22,25 @@ class Opinion(db.Model):
 
 @app.route('/')
 def index_view():
-    # Определить количество мнений в базе данных.
     quantity = Opinion.query.count()
-    # Если мнений нет...
     if not quantity:
-        # ...то вернуть сообщение:
-        return 'В базе данных мнений о фильмах нет.'
-    # Иначе выбрать случайное число в диапазоне от 0 до quantity...
+        return 'В базе данных записей нет.'
     offset_value = randrange(quantity)
-    # ...и определить случайный объект.
     opinion = Opinion.query.offset(offset_value).first()
-    return opinion.text
+    # Подключить шаблон opinion.html.
+    return render_template('opinion.html', opinion=opinion)
+
+
+@app.route('/add')
+def add_opinion_view():
+    # Подключить шаблон add_opinion.html.
+    return render_template('add_opinion.html')
+
+@app.route('/opinions/<int:id>') 
+def opinion_view(id):  
+    # Метод get() заменён на get_or_404():
+    opinion = Opinion.query.get_or_404(id)  
+    return render_template('opinion.html', opinion=opinion) 
 
 if __name__ == '__main__':
-    app.run()
+    app.run() 

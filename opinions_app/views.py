@@ -4,6 +4,7 @@ from opinions_app import app, db
 from .models import Opinion
 from .forms import OpinionForm
 
+
 @app.route('/')
 def index_view():
     quantity = Opinion.query.count()
@@ -13,7 +14,7 @@ def index_view():
         abort(500)
     offset_value = randrange(quantity)
     opinion = Opinion.query.offset(offset_value).first()
-    return render_template('opinion.html', opinion=opinion) 
+    return render_template('opinion.html', opinion=opinion)
 
 
 @app.route('/add', methods=['GET', 'POST'])
@@ -35,10 +36,11 @@ def add_opinion_view():
         # Затем переадресовать пользователя на страницу добавленного мнения.
         return redirect(url_for('opinion_view', id=opinion.id))
     # Если валидация не пройдена - просто отрисовать страницу с формой.
-    return render_template('add_opinion.html', form=form) 
+    return render_template('add_opinion.html', form=form)
 
-@app.route('/opinions/<int:id>') 
-def opinion_view(id):  
+
+@app.route('/opinions/<int:id>')
+def opinion_view(id):
     # Метод get() заменён на get_or_404():
-    opinion = Opinion.query.get_or_404(id)  
+    opinion = Opinion.query.get_or_404(id)
     return render_template('opinion.html', opinion=opinion)

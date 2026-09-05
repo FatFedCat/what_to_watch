@@ -10,4 +10,4 @@ app.config.from_object(Config)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
-from . import commands, error_handlers, views
+from . import commands, error_handlers, views  # noqa: E402, F401

@@ -1,4 +1,5 @@
-# settings.py 
+# settings.py
+import os
 class Config:
-    SECRET_KEY = 'super_secret_key_12345'
-    SQLALCHEMY_DATABASE_URI= 'sqlite:///db.sqlite3'
+    SECRET_KEY = os.getenv('SECRET_KEY')
+    SQLALCHEMY_DATABASE_URI= os.getenv('SQLALCHEMY_DATABASE_URI')

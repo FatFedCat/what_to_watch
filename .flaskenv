@@ -1,2 +1,0 @@
-FLASK_APP=opinions_app
-FLASK_DEBUG=1
